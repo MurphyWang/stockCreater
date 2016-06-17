@@ -37,7 +37,6 @@
 
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
 			p:dataSource-ref="dataSource">
-
 		</bean>
 
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
@@ -46,6 +45,15 @@
 			<property name="url" value="${url}" />
 			<property name="username" value="${username}" />
 			<property name="password" value="${password}" />
+		</bean>
+		
+		<bean id="stockInfoDaoImpl" class = "dao.impl.StockInfoDaoImpl" factory-method="getInstance">
+		</bean>
+		
+		<bean id="generatePriceImpl" class = "service.impl.LinearPriceGeneraterImpl" factory-method="getInstance">
+		</bean>
+		
+		<bean id="phaseGeneraterImpl" class = "service.impl.PhaseGeneraterImpl" factory-method="getInstance">
 		</bean>
 
 	</beans>
