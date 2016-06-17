@@ -7,7 +7,7 @@
 	<properties>
 		<springversion>4.2.6.RELEASE</springversion>
 		<mybatis.version>3.4.0</mybatis.version>
-		<mybatis.spring.version>1.2.2</mybatis.spring.version>
+		<mybatis.spring.version>1.3.0</mybatis.spring.version>
 	</properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -17,6 +17,12 @@
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
+			</resource>
+			<resource>
+				<directory>src</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
 			</resource>
 		</resources>
 		<plugins>
@@ -29,14 +35,20 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		
+
 	</build>
 
 	<dependencies>
 		<dependency>
-		    <groupId>commons-dbcp</groupId>
-		    <artifactId>commons-dbcp</artifactId>
-		    <version>1.4</version>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>sqljdbc4</artifactId>
+			<version>4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
 		</dependency>
 
 		<dependency>
