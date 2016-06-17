@@ -52,6 +52,7 @@ public class GenerateThread extends Thread {
 //			cache.put(i, stockInfo);
 //			lastClosedPrice = stockInfo.getClose();
 //		}
+		System.out.println("params need to be considered, thread doesn't work yet");
 	}
 
 }

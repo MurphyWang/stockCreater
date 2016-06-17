@@ -11,8 +11,7 @@
 		WindCode = #{windCode},
 		OpenPrice = #{open},
 		High = #{high},
-		Low =
-		#{low},
+		Low =#{low},
 		ClosePrice = #{close}
 		where SNID = #{snid}
 	</update>

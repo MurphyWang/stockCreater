@@ -51,6 +51,8 @@ public class StartUp {
 		amplitude = Double.parseDouble(pro.getProperty("amplitude"));
 		startPrice = new BigDecimal(Double.parseDouble(pro.getProperty("startPrice")));
 
+		System.out.println("**********Processing***********");
+		
 		// random point
 		int[] x = phaseGenerater.divideX(days, 1, leastPhasePercent);
 		BigDecimal[] y = phaseGenerater.generateY(startPrice, 1, amplitude);
@@ -61,16 +63,17 @@ public class StartUp {
 		// generate model
 		BigDecimal[][] kB = priceGenerater.calcLineParamAndB(0, y, x);
 
+		run(x, kB);
+		
+		System.out.println("**********Processed***********");
 		// for (int i = 1; i < phase[a] - phase[a - 1]; i++) {
 		// System.out.println("processing line: y = " + kB[0][i - 1] + "x + " +
 		// kB[1][i - 1]);
 		// }
-		GenerateThread generateThread = new GenerateThread();
-		generateThread.setProperties(x, kB);
-		Thread thread1 = new Thread(generateThread);
-		thread1.start();
-		
-		run(x, kB);
+		// GenerateThread generateThread = new GenerateThread();
+		// generateThread.setProperties(x, kB);
+		// Thread thread1 = new Thread(generateThread);
+		// thread1.start();
 	}
 
 	private static void run(int[] x, BigDecimal[][] kB) {
@@ -85,6 +88,7 @@ public class StartUp {
 				System.err.println("error when getPriceOnline");
 				break;
 			}
+			
 			// generate price
 			stockInfo = priceGenerater.generateFourPrices(stockInfo, priceOnLine, lastClosedPrice);
 			for (int j = 1; j < x.length; j++) {
@@ -97,7 +101,7 @@ public class StartUp {
 				}
 			}
 			System.out.println("***********SNID = " + i + "****" + stockInfo.getSnid() + "**" + stockInfo.getClose());
-			// stockInfoDao.insert(stockInfo);
+			stockInfoDao.insert(stockInfo);
 			cache.put(i, stockInfo);
 			lastClosedPrice = stockInfo.getClose();
 		}
@@ -121,9 +125,5 @@ public class StartUp {
 		}
 		return pro;
 	}
-
-	
-
-	
 
 }
