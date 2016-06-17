@@ -5,13 +5,26 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import dao.IStockInfoDao;
+import dao.mapper.IStockInfoDao;
 import dao.mapper.StockInfoMapper;
 import model.StockInfo;
 
 @Repository
 public class StockInfoDaoImpl implements IStockInfoDao{
 
+	private static StockInfoDaoImpl instance;
+
+	private StockInfoDaoImpl() {
+        
+    }
+
+	public synchronized static StockInfoDaoImpl getInstance() {
+		if (instance == null) {
+			instance = new StockInfoDaoImpl();
+		}
+		return instance;
+	}
+	
 	@Autowired
 	private StockInfoMapper mapper;
 	
@@ -38,8 +51,13 @@ public class StockInfoDaoImpl implements IStockInfoDao{
 
 	@Override
 	public void update(StockInfo stockInfo) {
-		// TODO Auto-generated method stub
+		mapper.update(stockInfo);
 		
+	}
+
+	@Override
+	public void deleteAll() {
+		mapper.deleteAll();
 	}
 
 }

@@ -15,4 +15,5 @@ public interface StockInfoMapper {
 	
 	void delete(int id);
 
+	void deleteAll();
 }
