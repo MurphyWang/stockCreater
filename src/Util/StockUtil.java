@@ -1,10 +1,7 @@
-package Util;
+package util;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Random;
-
-import model.StockInfo;
 
 public class StockUtil {
 
@@ -29,51 +26,19 @@ public class StockUtil {
 	
 	//format to BigDecimal(#####.####)
 	public static BigDecimal formatPrice(BigDecimal price) {
-		if (price.intValue() >= 100000) {
-			throw new UnsupportedOperationException("price is out of 99999.9999");
+		if (price.doubleValue() >= 99999.99994) {
+			throw new UnsupportedOperationException("price is out of 99999.99994");
 		}
 		BigDecimal result = price.setScale(4, BigDecimal.ROUND_HALF_UP);
 		return result;
 
 	}
 	
-	
 	public static BigDecimal formatDoublePrice(Double price) {
 		BigDecimal result = formatPrice(new BigDecimal(price));
 		return result;
 	}
-
-	//random four price{open, low, high, close}
-	public static StockInfo randomFourPrice(StockInfo stockInfo, BigDecimal priceOnLine, BigDecimal lastClosedPrice) {
-		if (stockInfo.getSnid() == 1) {
-			stockInfo.setClose(priceOnLine);
-			return stockInfo;
-		}
-		
-		BigDecimal prices[] = new BigDecimal[4];
-		for (int i = 0; i < 4; i++) {
-			prices[i] = new BigDecimal(0);
-			while (prices[i].doubleValue() > limitUp(lastClosedPrice).doubleValue()
-					|| prices[i].doubleValue() < limitDown(lastClosedPrice).doubleValue()) {
-				prices[i] = StockUtil.getRandomBigDecimal(priceOnLine.multiply(new BigDecimal(0.9)),
-						priceOnLine.multiply(new BigDecimal(1.1)));
-			}
-			
-		}
-		Arrays.sort(prices);
-		stockInfo.setHigh(StockUtil.formatPrice(prices[3]));
-		stockInfo.setLow(StockUtil.formatPrice(prices[0]));
-		Random random = new Random();
-		if (random.nextBoolean()) {
-			stockInfo.setOpen(StockUtil.formatPrice(prices[2]));
-			stockInfo.setClose(StockUtil.formatPrice(prices[1]));
-		} else {
-			stockInfo.setOpen(StockUtil.formatPrice(prices[1]));
-			stockInfo.setClose(StockUtil.formatPrice(prices[2]));
-		}
-		return stockInfo;
-	}
-
+	
 	//calculate the limit-up price
 	public static BigDecimal limitUp(BigDecimal price) {
 		return formatPrice(price.multiply(new BigDecimal(1.1)));
@@ -82,5 +47,13 @@ public class StockUtil {
 	//calculate the limit-down price
 	public static BigDecimal limitDown(BigDecimal price) {
 		return formatPrice(price.multiply(new BigDecimal(0.9)));
+	}
+	
+	public static BigDecimal square(BigDecimal a, int x) {
+		return formatDoublePrice(Math.pow(a.doubleValue(), 1.0/x));
+	}
+	
+	public static BigDecimal pow(BigDecimal a, int x) {
+		return formatPrice(a.pow(x));
 	}
 }
