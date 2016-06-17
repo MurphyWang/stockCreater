@@ -1,29 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dao.mapper.StockInfoMapper">
-    <insert id="insert" parameterType="model.StockInfo" >
-        insert into SC_StockDays(WindCode, SNID, OpenPrice, High, Low, ClosePrice) values(#{windCode}, #{snid}, #{open}, #{high}, #{low}, #{close})
-    </insert>
-    
-    <update id="update" parameterType="model.StockInfo" >
-    	update SC_StockDays set
-    			WindCode = #{windCode},
-    			OpenPrice = #{open},
-    			High = #{high},
-    			Low = #{low},
-    			ClosePrice = #{close}
-    		where SNID = #{snid}
-    </update>
-    
-    <select id="getById" resultType="model.StockInfo">
-    	select * from SC_StockDays where SNID = #{snid} 
-    </select>
-    
-    <select id="getAll" resultType="model.StockInfo">
-    	select * from SC_StockDays 
-    </select>
-    
-    <delete id="delete" parameterType = "int">
-    	delete from SC_StockDays where SNID = #{snid} 
-    </delete>
+	<insert id="insert" parameterType="model.StockInfo">
+		insert into
+		SC_StockDays(WindCode, SNID, OpenPrice, High, Low, ClosePrice)
+		values(#{windCode}, #{snid}, #{open}, #{high}, #{low}, #{close})
+	</insert>
+	<update id="update" parameterType="model.StockInfo">
+		update SC_StockDays set
+		WindCode = #{windCode},
+		OpenPrice = #{open},
+		High = #{high},
+		Low =
+		#{low},
+		ClosePrice = #{close}
+		where SNID = #{snid}
+	</update>
+
+	<select id="getById" resultType="model.StockInfo">
+		select * from SC_StockDays where
+		SNID = #{snid}
+	</select>
+
+	<select id="getAll" resultType="model.StockInfo">
+		select * from SC_StockDays
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from SC_StockDays where
+		SNID = #{snid}
+	</delete>
+
+	<delete id="deleteAll" parameterType="int">
+		delete from SC_StockDays
+		where 1 =1
+	</delete>
 </mapper>
