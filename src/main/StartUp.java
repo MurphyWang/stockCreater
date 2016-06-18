@@ -26,6 +26,7 @@ public class StartUp {
 	private static double leastPhasePercent;
 	private static double amplitude;
 	private static BigDecimal startPrice;
+	private static int modelType;
 
 	private static Map<Integer, StockInfo> cache = new HashMap<>();
 	private static Map<String, String> properties = new HashMap<>();
@@ -50,12 +51,12 @@ public class StartUp {
 		leastPhasePercent = Double.parseDouble(pro.getProperty("leastPhasePercent"));
 		amplitude = Double.parseDouble(pro.getProperty("amplitude"));
 		startPrice = new BigDecimal(Double.parseDouble(pro.getProperty("startPrice")));
-
+		modelType = Integer.parseInt(pro.getProperty("modelType"));
 		System.out.println("**********Processing***********");
 		
 		// random point
-		int[] x = phaseGenerater.divideX(days, 1, leastPhasePercent);
-		BigDecimal[] y = phaseGenerater.generateY(startPrice, 1, amplitude);
+		int[] x = phaseGenerater.divideX(days, modelType, leastPhasePercent);
+		BigDecimal[] y = phaseGenerater.generateY(modelType, startPrice, new BigDecimal(amplitude), x);
 		for (int i = 0; i < y.length; i++) {
 			System.out.println("**********six pionts: {x = " + x[i] + ", y = " + y[i]);
 		}

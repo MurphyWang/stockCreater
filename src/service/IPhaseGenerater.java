@@ -6,5 +6,5 @@ public interface IPhaseGenerater {
 
 	int[] divideX(int days, int type, double leastPhasePercent);
 
-	BigDecimal[] generateY(BigDecimal startPrice, int numberOfModel, double amplitude);
+	BigDecimal[] generateY(int numberOfModel, BigDecimal startPrice, BigDecimal amplitude, int[] x);
 }

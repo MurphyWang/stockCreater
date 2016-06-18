@@ -13,7 +13,15 @@ public abstract class AbstractPriceGeneraterImpl implements IPriceGenerater {
 	// random four price{open, low, high, close}
 	public StockInfo generateFourPrices(StockInfo stockInfo, BigDecimal priceOnLine, BigDecimal lastClosedPrice) {
 		if (stockInfo.getSnid() == 1) {
-			stockInfo.setClose(priceOnLine);
+			BigDecimal close = priceOnLine;
+			stockInfo.setClose(close);
+			BigDecimal limitUp = StockUtil.limitUp(close);
+			BigDecimal limitDown = StockUtil.limitDown(close);
+			BigDecimal high = StockUtil.getRandomBigDecimal(close, limitUp);
+			stockInfo.setHigh(high);
+			stockInfo.setLow(StockUtil.getRandomBigDecimal(limitDown, close));
+			BigDecimal open = StockUtil.getRandomBigDecimal(limitDown, limitUp);
+			stockInfo.setOpen(open);
 			return stockInfo;
 		}
 

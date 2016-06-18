@@ -28,9 +28,18 @@ public class PhaseGeneraterImpl implements IPhaseGenerater {
 	}
 
 	@Override
-	public BigDecimal[] generateY(BigDecimal startPrice, int numberOfModel, double amplitude){
+	public BigDecimal[] generateY(int numberOfModel, BigDecimal startPrice, BigDecimal amplitude, int[] x){
 		//TODO: by numberOfModel
-		return randomY(startPrice, amplitude);
+		switch (numberOfModel) {
+		case 1:
+			return randomUpY(startPrice, amplitude, x);
+
+		case 2:
+			return randomDownY(startPrice, amplitude, x);
+		
+		default:
+			return randomUpY(startPrice, amplitude, x);
+		}
 	}
 	private static int[] randomX(int days, double leastPhasePercent) {
 		int range[] = new int[6];
@@ -86,12 +95,19 @@ public class PhaseGeneraterImpl implements IPhaseGenerater {
 		return true;
 	}
 	
-	private static BigDecimal[] randomY(BigDecimal startPrice, double amplitude) {
+	private static BigDecimal[] randomUpY(BigDecimal startPrice, BigDecimal amplitude, int[] x) {
 		BigDecimal[] location = new BigDecimal[6];
 		location[0] = startPrice;
-		BigDecimal amplitudePrice = startPrice.multiply(new BigDecimal(amplitude));
-		BigDecimal top = StockUtil.getRandomBigDecimal(startPrice, startPrice.add(amplitudePrice));
+		BigDecimal amplitudePrice = startPrice.multiply(amplitude);
+		
+		BigDecimal top = highLimitRandom(startPrice, startPrice.add(amplitudePrice), x[5]);
 		BigDecimal bottom = top.subtract(amplitudePrice);
+		
+		while(isTooHigh(bottom, top, x[1])){
+			top = highLimitRandom(startPrice, startPrice.add(amplitudePrice), x[5]);
+			bottom = top.subtract(amplitudePrice);
+		}
+		
 
 		location[2] = StockUtil.formatPrice(bottom);
 		int topLocation = StockUtil.getRandomInt(1, 3);
@@ -121,5 +137,70 @@ public class PhaseGeneraterImpl implements IPhaseGenerater {
 			return location;
 		}
 
+	}
+
+	private static BigDecimal highLimitRandom(BigDecimal startPrice, BigDecimal endPrice, int x) {
+		BigDecimal high = StockUtil.getRandomBigDecimal(startPrice, endPrice);
+		while(isTooHigh(startPrice, high, x)){
+			high = StockUtil.getRandomBigDecimal(startPrice, endPrice);
+		}
+		return high;
+	}
+	
+	private static boolean isTooHigh(BigDecimal startPrice, BigDecimal top, int phase) {
+		return top.doubleValue() > startPrice.doubleValue()*Math.pow(1.1, phase - 1);
+	}
+
+	private static BigDecimal[] randomDownY(BigDecimal startPrice, BigDecimal amplitude, int[] x) {
+		BigDecimal[] location = new BigDecimal[6];
+		location[0] = startPrice;
+		BigDecimal amplitudePrice = startPrice.multiply(amplitude);
+		BigDecimal bottom = lowLimitRandom(startPrice.subtract(amplitudePrice), startPrice, x[5]);
+		BigDecimal top = bottom.add(amplitudePrice);
+		
+		while(isTooLow(bottom, top, x[1])){
+			bottom = lowLimitRandom(startPrice.subtract(amplitudePrice), startPrice, x[5]);
+			top = bottom.add(amplitudePrice);
+		}
+		
+		location[2] = StockUtil.formatPrice(top);
+		int bottomLocation = StockUtil.getRandomInt(1, 3);
+
+		switch (bottomLocation) {
+		case 1:
+			location[1] = bottom;
+			location[3] = StockUtil.getRandomBigDecimal(bottom, startPrice);
+			location[4] = StockUtil.getRandomBigDecimal(startPrice, top);
+			location[5] = StockUtil.getRandomBigDecimal(bottom, startPrice);
+			return location;
+
+		case 2:
+			location[1] = StockUtil.getRandomBigDecimal(bottom, startPrice);
+			location[3] = bottom;
+			location[4] = StockUtil.getRandomBigDecimal(startPrice, top);
+			location[5] = StockUtil.getRandomBigDecimal(bottom, startPrice);
+			return location;
+
+		case 3:
+			location[1] = StockUtil.getRandomBigDecimal(bottom, startPrice);
+			location[3] = StockUtil.getRandomBigDecimal(bottom, startPrice);
+			location[4] = StockUtil.getRandomBigDecimal(startPrice, top);
+			location[5] = bottom;
+			return location;
+		default:
+			return location;
+		}
+
+	}
+
+	private static BigDecimal lowLimitRandom(BigDecimal startPrice, BigDecimal endPrice, int x) {
+		BigDecimal low = StockUtil.getRandomBigDecimal(endPrice, startPrice);
+		while(isTooLow(startPrice, low, x)){
+			low = StockUtil.getRandomBigDecimal(endPrice, startPrice);
+		}
+		return low;
+	}
+	private static boolean isTooLow(BigDecimal bottom, BigDecimal startPrice, int phase) {
+		return bottom.doubleValue() < startPrice.doubleValue()*Math.pow(0.9, phase - 1);
 	}
 }
