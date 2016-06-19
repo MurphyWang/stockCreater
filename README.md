@@ -30,7 +30,6 @@ BigDecimal[] generateY(BigDecimal startPrice, BigDecimal amplitude, int[] x);
 
 /*参数:
 生成的点的坐标x,y
-
 方法：计算出模型的参数A和B，（根据两个点算两个参数）*/
 BigDecimal[][] calcLineParamAndB(BigDecimal[] y, int[] x)
 
