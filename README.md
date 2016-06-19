@@ -1,7 +1,7 @@
 # stockCreater
-  //Stockinfo类有windCode, snid, open, close, high, low
-  Class StockInfo{
-  }
+//Stockinfo类有windCode, snid, open, close, high, low
+Class StockInfo{
+}
   
 //根据文件路径config/config.property读取参数
 Map getProperties(String filepath);
