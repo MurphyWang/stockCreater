@@ -4,11 +4,11 @@ Class StockInfo{
 }
 
 //根据文件路径config/config.property读取参数
-Map getProperties(String filepath)
+Map getProperties(String filepath);
 
 //numberOfModel:震荡上升=1； 震荡下降=2
 //获得不同的处理器来进行下面的处理操作
-Handler getModelHandler(int numberOfModel)
+Handler getModelHandler(int numberOfModel);
 
 
 /*参数：
@@ -17,7 +17,7 @@ leastPhasePercent:震荡每一段的最小区间占总区间比例。
 
 方法：
 生成关键点的x坐标*/
-int[] divideX(int days, double leastPhasePercent)
+int[] divideX(int days, double leastPhasePercent);
 
 
 /*参数：
@@ -26,7 +26,7 @@ amplitude:振幅
 x:生成好的x坐标的集合
 方法：
 生成关键点的y坐标*/
-BigDecimal[] generateY(BigDecimal startPrice, BigDecimal amplitude, int[] x)
+BigDecimal[] generateY(BigDecimal startPrice, BigDecimal amplitude, int[] x);
 
 /*参数:
 生成的点的坐标x,y
@@ -42,7 +42,6 @@ Class GenerateThread() extend Thread{
   run(){
     for(int i = 0; i<x[a]-x[a-1]; i++){
       Stockinfo stockInfo = handler.generateFourPrices();
-      
       //数据库配置在config/jdbc.properties
       dao.insert(stockInfo)
     }
@@ -53,4 +52,4 @@ Class GenerateThread() extend Thread{
 lastClosedPrice 前一日的收盘价
 
 方法，根据前一天的收盘价随机生成四个±10%的数据，排序，中间两个任意选择一个为开盘价，另一个为收盘价了，同时要满足收盘价落在模型价格的某一个区间（直线模型就是±10%）范围内，否则重新随机。*/
-StockInfo generateFourPrices(StockInfo stockInfo, BigDecimal priceOnLine, BigDecimal lastClosedPrice)
+StockInfo generateFourPrices(StockInfo stockInfo, BigDecimal priceOnLine, BigDecimal lastClosedPrice);
