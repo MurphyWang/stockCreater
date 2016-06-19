@@ -33,21 +33,21 @@ BigDecimal[] generateY(BigDecimal startPrice, BigDecimal amplitude, int[] x);
 方法：计算出模型的参数A和B，（根据两个点算两个参数）*/
 BigDecimal[][] calcLineParamAndB(BigDecimal[] y, int[] x)
 
-* 编程语言
-//算出每一段的模型后
-Class GenerateThread() extend Thread{
-  //将参数传给子线程：handler, 模型的参数A和B, 已生成的X[]，初始值startprice 
-  public void setProperties(SelfProperty property)
-  
-  //根据模型计算出每个点的Stockinfo对应的四个值，并插入数据库
-  run(){
-    for(int i = 0; i<x[a]-x[a-1]; i++){
-      Stockinfo stockInfo = handler.generateFourPrices();
-      //数据库配置在config/jdbc.properties
-      dao.insert(stockInfo)
+
+  //算出每一段的模型后
+  Class GenerateThread() extend Thread{
+    //将参数传给子线程：handler, 模型的参数A和B, 已生成的X[]，初始值startprice 
+    public void setProperties(SelfProperty property)
+    
+    //根据模型计算出每个点的Stockinfo对应的四个值，并插入数据库
+    run(){
+      for(int i = 0; i<x[a]-x[a-1]; i++){
+        Stockinfo stockInfo = handler.generateFourPrices();
+        //数据库配置在config/jdbc.properties
+        dao.insert(stockInfo)
+      }
     }
   }
-}
 
 /*参数：priceOnLine 模型上的价格
 lastClosedPrice 前一日的收盘价
