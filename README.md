@@ -6,9 +6,9 @@ Class StockInfo{
 //根据文件路径config/config.property读取参数
 Map getProperties(String filepath);
   
-//numberOfModel:震荡上升=1； 震荡下降=2
+'//numberOfModel:震荡上升=1； 震荡下降=2
 //获得不同的处理器来进行下面的处理操作
-Handler getModelHandler(int numberOfModel);
+Handler getModelHandler(int numberOfModel);'
   
   
 /*参数：
