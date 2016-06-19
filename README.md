@@ -33,6 +33,7 @@ BigDecimal[] generateY(BigDecimal startPrice, BigDecimal amplitude, int[] x);
 方法：计算出模型的参数A和B，（根据两个点算两个参数）*/
 BigDecimal[][] calcLineParamAndB(BigDecimal[] y, int[] x)
 
+* 编程语言
 //算出每一段的模型后
 Class GenerateThread() extend Thread{
   //将参数传给子线程：handler, 模型的参数A和B, 已生成的X[]，初始值startprice 
