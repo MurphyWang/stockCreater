@@ -52,3 +52,6 @@ Class GenerateThread() extend Thread{
 lastClosedPrice 前一日的收盘价
 方法，根据前一天的收盘价随机生成四个±10%的数据，排序，中间两个任意选择一个为开盘价，另一个为收盘价了，同时要满足收盘价落在模型价格的某一个区间（直线模型就是±10%）范围内，否则重新随机。*/
 StockInfo generateFourPrices(StockInfo stockInfo, BigDecimal priceOnLine, BigDecimal lastClosedPrice);
+
+
+JSplitPane
