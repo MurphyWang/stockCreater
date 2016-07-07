@@ -3,47 +3,59 @@ package main;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import dao.impl.StockInfoDaoImpl;
 import dao.mapper.IStockInfoDao;
 import model.StockInfo;
 import service.IPhaseGenerater;
 import service.IPriceGenerater;
-import service.impl.LinearPriceGeneraterImpl;
-import service.impl.PhaseGeneraterImpl;
 import util.StockUtil;
 
 public class StartUp {
 
-	private static int days;
-	private static String windCode;
-	private static double leastPhasePercent;
-	private static double amplitude;
-	private static BigDecimal startPrice;
-	private static int modelType;
+	private static StartUp instance;
 
-	private static Map<Integer, StockInfo> cache = new HashMap<>();
-	private static Map<String, String> properties = new HashMap<>();
+	public static StartUp getInstance() {
+		if (instance == null) {
+			instance = new StartUp();
+		}
+		return instance;
+	}
 
-	private static IStockInfoDao stockInfoDao;
+	private StartUp() {
+	}
 
-	private static IPriceGenerater priceGenerater;
+	private int days;
+	private String windCode;
+	private double leastPhasePercent;
+	private double amplitude;
+	private BigDecimal startPrice;
 
-	private static IPhaseGenerater phaseGenerater;
+	final Map<Integer, StockInfo> cache = new HashMap<>();
+	private Map<String, String> properties = new HashMap<>();
 
-	public static void main(String[] args) {
+	@Autowired
+	private IStockInfoDao stockInfoDaoImpl;
 
-		final FileSystemXmlApplicationContext classpathContext = new FileSystemXmlApplicationContext(
-				"config/applicationContext.xml");
-		stockInfoDao = classpathContext.getBean(StockInfoDaoImpl.class);
-		priceGenerater = classpathContext.getBean(LinearPriceGeneraterImpl.class);
-		phaseGenerater = classpathContext.getBean(PhaseGeneraterImpl.class);
+	@Autowired
+	private IPhaseGenerater phaseGenerater;
+
+	@Autowired
+	private IPriceGenerater linearPriceGeneraterImpl;
+
+	public Collection<StockInfo> generate() {
+
+		// stockInfoDao = classpathContext.getBean(StockInfoDaoImpl.class);
+		// priceGenerater =
+		// classpathContext.getBean(LinearPriceGeneraterImpl.class);
+		// phaseGenerater = classpathContext.getBean(PhaseGeneraterImpl.class);
 		Properties pro = getProperties("config/config.properties");
 
 		days = Integer.parseInt(pro.getProperty("days"));
@@ -51,22 +63,17 @@ public class StartUp {
 		leastPhasePercent = Double.parseDouble(pro.getProperty("leastPhasePercent"));
 		amplitude = Double.parseDouble(pro.getProperty("amplitude"));
 		startPrice = new BigDecimal(Double.parseDouble(pro.getProperty("startPrice")));
-		modelType = Integer.parseInt(pro.getProperty("modelType"));
-		System.out.println("**********Processing***********");
-		
+
 		// random point
-		int[] x = phaseGenerater.divideX(days, modelType, leastPhasePercent);
-		BigDecimal[] y = phaseGenerater.generateY(modelType, startPrice, new BigDecimal(amplitude), x);
+		int[] x = phaseGenerater.divideX(days, 1, leastPhasePercent);
+		BigDecimal[] y = phaseGenerater.generateY(startPrice, 1, amplitude);
 		for (int i = 0; i < y.length; i++) {
 			System.out.println("**********six pionts: {x = " + x[i] + ", y = " + y[i]);
 		}
 
 		// generate model
-		BigDecimal[][] kB = priceGenerater.calcLineParamAndB(0, y, x);
+		BigDecimal[][] kB = linearPriceGeneraterImpl.calcLineParamAndB(0, y, x);
 
-		run(x, kB);
-		
-		System.out.println("**********Processed***********");
 		// for (int i = 1; i < phase[a] - phase[a - 1]; i++) {
 		// System.out.println("processing line: y = " + kB[0][i - 1] + "x + " +
 		// kB[1][i - 1]);
@@ -75,23 +82,26 @@ public class StartUp {
 		// generateThread.setProperties(x, kB);
 		// Thread thread1 = new Thread(generateThread);
 		// thread1.start();
+
+		Collection<StockInfo> stockInfos = run(x, kB);
+		return stockInfos;
 	}
 
-	private static void run(int[] x, BigDecimal[][] kB) {
+	private Collection<StockInfo> run(int[] x, BigDecimal[][] kB) {
 		BigDecimal lastClosedPrice = startPrice;
-		stockInfoDao.deleteAll();
+		stockInfoDaoImpl.deleteAll();
+		Collection<StockInfo> stockInfos = new LinkedList<>();
 		for (int i = 1; i <= days; i++) {
 			StockInfo stockInfo = new StockInfo();
 			stockInfo.setWindCode(windCode);
 			stockInfo.setSnid(i);
-			BigDecimal priceOnLine = priceGenerater.getPriceOnline(i, kB, x);
+			BigDecimal priceOnLine = linearPriceGeneraterImpl.getPriceOnline(i, kB, x);
 			if (priceOnLine == null) {
 				System.err.println("error when getPriceOnline");
 				break;
 			}
-			
 			// generate price
-			stockInfo = priceGenerater.generateFourPrices(stockInfo, priceOnLine, lastClosedPrice);
+			stockInfo = linearPriceGeneraterImpl.generateFourPrices(stockInfo, priceOnLine, lastClosedPrice);
 			for (int j = 1; j < x.length; j++) {
 				if (i == x[j]) {
 					stockInfo.setClose(priceOnLine);
@@ -102,13 +112,15 @@ public class StartUp {
 				}
 			}
 			System.out.println("***********SNID = " + i + "****" + stockInfo.getSnid() + "**" + stockInfo.getClose());
-			stockInfoDao.insert(stockInfo);
+			// stockInfoDaoImpl.insert(stockInfo);
+			stockInfos.add(stockInfo);
 			cache.put(i, stockInfo);
 			lastClosedPrice = stockInfo.getClose();
 		}
+		return stockInfos;
 	}
 
-	private static Properties getProperties(String filePath) {
+	private Properties getProperties(String filePath) {
 		Properties pro = new Properties();
 		try {
 			FileInputStream in = new FileInputStream(filePath);
