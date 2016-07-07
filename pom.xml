@@ -39,7 +39,6 @@
 	</build>
 
 	<dependencies>
-	
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>sqljdbc4</artifactId>
