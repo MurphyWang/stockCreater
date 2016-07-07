@@ -56,5 +56,7 @@
 		<bean id="phaseGeneraterImpl" class = "service.impl.PhaseGeneraterImpl" factory-method="getInstance">
 		</bean>
 
+		<bean id="startUp" class="main.StartUp" factory-method="getInstance" />
+		<bean id="kLineCombineChart" class="gui.KLineCombineChart" factory-method="getInstance" />
 	</beans>
 </beans>
