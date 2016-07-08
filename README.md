@@ -55,3 +55,4 @@ StockInfo generateFourPrices(StockInfo stockInfo, BigDecimal priceOnLine, BigDec
 
 
 JSplitPane
+http://download.csdn.net/download/haiking5253/8989077
