@@ -3,24 +3,14 @@ package service.impl;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
+import org.springframework.stereotype.Component;
+
 import service.IPhaseGenerater;
 import util.StockUtil;
 
+@Component
 public class PhaseGeneraterImpl implements IPhaseGenerater {
 
-	private static PhaseGeneraterImpl instance;
-
-	private PhaseGeneraterImpl() {
-        
-    }
-
-	public synchronized static PhaseGeneraterImpl getInstance() {
-		if (instance == null) {
-			instance = new PhaseGeneraterImpl();
-		}
-		return instance;
-	}
-	
 	@Override
 	public int[] divideX(int days, int numberOfModel, double leastPhasePercent) {
 		//TODO: divide by type

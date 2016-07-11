@@ -2,23 +2,14 @@ package service.impl;
 
 import java.math.BigDecimal;
 
+import org.springframework.stereotype.Component;
+
 import service.IPriceGenerater;
 import util.StockUtil;
 
+@Component
 public class LinearPriceGeneraterImpl extends AbstractPriceGeneraterImpl implements IPriceGenerater {
 
-	private static LinearPriceGeneraterImpl instance;
-
-	private LinearPriceGeneraterImpl() {
-
-	}
-
-	public synchronized static LinearPriceGeneraterImpl getInstance() {
-		if (instance == null) {
-			instance = new LinearPriceGeneraterImpl();
-		}
-		return instance;
-	}
 
 	@Override
 	public BigDecimal randomPrice(BigDecimal lastClosedPrice) {

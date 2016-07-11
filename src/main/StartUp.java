@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import dao.mapper.IStockInfoDao;
 import model.StockInfo;
@@ -18,6 +19,7 @@ import service.IPhaseGenerater;
 import service.IPriceGenerater;
 import util.StockUtil;
 
+@Component
 public class StartUp {
 
 	private static StartUp instance;
@@ -66,7 +68,7 @@ public class StartUp {
 
 		// random point
 		int[] x = phaseGenerater.divideX(days, 1, leastPhasePercent);
-		BigDecimal[] y = phaseGenerater.generateY(startPrice, 1, amplitude);
+		BigDecimal[] y = phaseGenerater.generateY(1, startPrice, new BigDecimal(amplitude), x);
 		for (int i = 0; i < y.length; i++) {
 			System.out.println("**********six pionts: {x = " + x[i] + ", y = " + y[i]);
 		}

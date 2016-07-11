@@ -26,7 +26,9 @@
 
 		<tx:annotation-driven transaction-manager="transactionManager" />
 
-		<context:component-scan base-package="com" />
+		<context:component-scan base-package="service.*" />
+		<context:component-scan base-package="dao.*" />
+		<context:component-scan base-package="main.*" />
 
 		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
 			p:basePackage="dao.mapper" />
@@ -47,15 +49,7 @@
 			<property name="password" value="${password}" />
 		</bean>
 		
-		<bean id="stockInfoDaoImpl" class = "dao.impl.StockInfoDaoImpl" factory-method="getInstance">
-		</bean>
 		
-		<bean id="generatePriceImpl" class = "service.impl.LinearPriceGeneraterImpl" factory-method="getInstance">
-		</bean>
-		
-		<bean id="phaseGeneraterImpl" class = "service.impl.PhaseGeneraterImpl" factory-method="getInstance">
-		</bean>
-
 		<bean id="startUp" class="main.StartUp" factory-method="getInstance" />
 		<bean id="kLineCombineChart" class="gui.KLineCombineChart" factory-method="getInstance" />
 	</beans>
