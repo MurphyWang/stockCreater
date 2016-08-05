@@ -16,6 +16,7 @@
 				<directory>resource</directory>
 				<excludes>
 					<exclude>**/*.java</exclude>
+					
 				</excludes>
 			</resource>
 			<resource>
@@ -39,11 +40,15 @@
 	</build>
 
 	<dependencies>
-		<!-- dependency>
-			<groupId>com.microsoft.sqlserver</groupId>
-			<artifactId>sqljdbc4</artifactId>
-			<version>4.0</version>
-		</dependency> -->
+		<!-- dependency> <groupId>com.microsoft.sqlserver</groupId> <artifactId>sqljdbc4</artifactId> 
+			<version>4.0</version> </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/jfree/jfreechart -->
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.13</version>
+		</dependency>
 
 		<dependency>
 			<groupId>commons-dbcp</groupId>

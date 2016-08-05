@@ -2,12 +2,17 @@ package main;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.MenuBar;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -18,7 +23,6 @@ import org.jfree.chart.JFreeChart;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import gui.KLineCombineChart;
-import listener.ReGenerateButtonListener;
 import model.StockInfo;
 
 public class GridBagDemo extends JFrame {
@@ -47,9 +51,9 @@ public class GridBagDemo extends JFrame {
 	}
 
 	public void init() {
-		openButton = new JButton("open");
+		openButton = new JButton("Ë¢ÐÂ");
 		openButton.addActionListener(new ReGenerateButtonListener());
-		saveButton = new JButton("save");
+		saveButton = new JButton("µ¼³ö");
 		saveOtherButton = new JButton("saveOther");
 		j4 = new JPanel();
 		String[] str = { "java", "C#", "HTML5" };
@@ -63,7 +67,6 @@ public class GridBagDemo extends JFrame {
 		panel.setFillZoomRectangle(true);
 		panel.setMouseWheelEnabled(true);
 //		frame.setBackground(Color.PINK);
-		
 		
 		GridBagLayout layout = new GridBagLayout();
 		this.setLayout(layout);
@@ -79,7 +82,6 @@ public class GridBagDemo extends JFrame {
 		GridBagConstraints s = new GridBagConstraints();//
 		//
 		s.fill = GridBagConstraints.BOTH;
-		
 		s.gridwidth = 8;
 		s.gridheight = 8;
 		s.weightx = 1;
@@ -123,6 +125,28 @@ public class GridBagDemo extends JFrame {
 		s.weighty = 1;
 		layout.setConstraints(list, s);
 		;
+	}
+	
+	//edit params
+	private class editParamsListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("test");
+		}
+		
+	}
+	//refresh button
+	private class ReGenerateButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Collection<StockInfo> stockInfos = StartUp.getInstance().generate();
+			JFreeChart chart = KLineCombineChart.getInstance().getChart(stockInfos);
+			panel.setChart(chart);
+			panel.repaint();
+		}
+		
 	}
 
 	JButton openButton;

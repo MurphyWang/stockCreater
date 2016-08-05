@@ -114,7 +114,7 @@ public class StartUp {
 				}
 			}
 			System.out.println("***********SNID = " + i + "****" + stockInfo.getSnid() + "**" + stockInfo.getClose());
-			// stockInfoDaoImpl.insert(stockInfo);
+			stockInfoDaoImpl.insert(stockInfo);
 			stockInfos.add(stockInfo);
 			cache.put(i, stockInfo);
 			lastClosedPrice = stockInfo.getClose();
